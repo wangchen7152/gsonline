@@ -82,11 +82,29 @@ class OrgHome(View):
     """
 
     def get(self, request, org_id):
+        current = "home"
         course_org = CourseOrg.objects.get(id=int(org_id))
         all_courses = course_org.course_set.all()[:3]
         all_teacher = course_org.teacher_set.all()[:2]
         return render(request, "org-detail-homepage.html", {
             "all_courses": all_courses,
             "all_teacher": all_teacher,
+            "course_org": course_org,
+            "current": current
+        })
+
+
+class CourseHome(View):
+    """
+    机构课程页面
+    """
+
+    def get(self, request, org_id):
+        current = "course"
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        all_courses = course_org.course_set.all()[:3]
+        return render(request, "org-detail-course.html", {
+            "all_courses": all_courses,
+            "current": current,
             "course_org": course_org,
         })
