@@ -74,3 +74,19 @@ class AskUser(View):
         else:
             return HttpResponse("{'status': 'failed', 'msg': '添加出错'}",
                                 content_type='application/json')
+
+
+class OrgHome(View):
+    """
+    机构s首页
+    """
+
+    def get(self, request, org_id):
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        all_courses = course_org.course_set.all()[:3]
+        all_teacher = course_org.teacher_set.all()[:2]
+        return render(request, "org-detail-homepage.html", {
+            "all_courses": all_courses,
+            "all_teacher": all_teacher,
+            "course_org": course_org,
+        })

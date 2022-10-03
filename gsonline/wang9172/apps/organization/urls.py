@@ -3,9 +3,10 @@
 __author__ = 'wang'
 
 from django.conf.urls import url, include
-from .views import AskUser, OrgList
+from .views import AskUser, OrgList, OrgHome
 
 urlpatterns = [
     url(r'^user_ask/$', AskUser.as_view(), name="user_ask"),
     url(r'^list/$', OrgList.as_view(), name='list'),
+    url(r'^home/(?P<org_id>\d+)$', OrgHome.as_view(), name='org_home'),
 ]
