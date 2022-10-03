@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from datetime import datetime
 
 from django.db import models
+from organization.models import CourseOrg
 
 
 # Create your models here.
@@ -25,6 +26,7 @@ class Course(models.Model):
                               max_length=256)
     click_num = models.IntegerField(default=0, verbose_name=u"点击数")
     add_time = models.DateField(default=datetime.now)
+    course = models.ForeignKey(CourseOrg, verbose_name=u"课程机构", blank=True)
 
     class Meta:
         verbose_name = u"课程"
