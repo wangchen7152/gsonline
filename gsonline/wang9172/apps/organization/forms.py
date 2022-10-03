@@ -8,10 +8,10 @@ from operation.models import UserAsk
 import re
 
 
-class TestUserAskForm(forms):
-    name = forms.CharField(required=True, max_length=64, min_length=2)
-    phone = forms.CharField(required=True, max_length=11, min_length=11)
-    course_name = forms.CharField(required=True, max_length=64, min_length=1)
+# class TestUserAskForm(forms):
+#     name = forms.CharField(required=True, max_length=64, min_length=2)
+#     phone = forms.CharField(required=True, max_length=11, min_length=11)
+#     course_name = forms.CharField(required=True, max_length=64, min_length=1)
 
 
 class UserAskForm(forms.ModelForm):
