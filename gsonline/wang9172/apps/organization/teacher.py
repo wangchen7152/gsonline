@@ -1,4 +1,4 @@
-# _*_ encoding:utf_8 _*_
+# _*_ encoding:utf-8 _*_
 from django.shortcuts import render
 from django.views.generic import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
@@ -16,7 +16,9 @@ class TeacherList(View):
         sort = request.GET.get("sort", "")
         if sort:
             if sort == u"hot":
-                teachers = teachers.order_by("-click_nums")
+                teachers = teachers.order_by("-click_num")
+            else:
+                teachers = teachers.order_by("-student_num")
 
         sort_teachers = Teacher.objects.all().order_by("-click_nums")[:3]
 
