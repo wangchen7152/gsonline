@@ -50,4 +50,7 @@ urlpatterns = [
 
     # 批量配置课程机构
     url(r'^org/', include('organization.urls', namespace="org")),
+
+    # 配置讲师
+    url(r'^teacher/', include('organization.urls', namespace="teacher")),
 ]
