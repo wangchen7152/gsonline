@@ -6,6 +6,7 @@ from django.http import HttpResponse
 
 from .models import City, CourseOrg, Teacher
 from .forms import UserAskForm
+from courses.models import Course
 
 
 # Create your views here.
@@ -107,4 +108,35 @@ class CourseHome(View):
             "all_courses": all_courses,
             "current": current,
             "course_org": course_org,
+        })
+
+
+class TeacherHome(View):
+    """
+    机构教师页面
+    """
+
+    def get(self, request, org_id):
+        current = "teacher"
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        all_teacher = course_org.teacher_set.all()[:2]
+
+        return render(request, "org-detail-teachers.html", {
+            "all_teacher": all_teacher,
+            "current": current,
+            "course_org": course_org
+        })
+
+
+class DesHome(View):
+    """
+    机构课程页面
+    """
+
+    def get(self, request, org_id):
+        current = "des"
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        return render(request, "org-detail-desc.html", {
+            "current": current,
+            "course_org": course_org
         })
