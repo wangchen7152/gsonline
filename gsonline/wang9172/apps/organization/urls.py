@@ -18,6 +18,6 @@ urlpatterns = [
     url(r'^des/(?P<org_id>\d+)$', DesHome.as_view(), name='des'),
     url(r'^add_fav/$', FavoriteHome.as_view(), name='add_fav'),
     url(r'^teacher/list/$', TeacherList.as_view(), name='teacher_list'),
-    url(r'^teacher_detail/(?P<teacher_id>\d+)$', TeacherDetail.as_view(),
+    url(r'^teacher/detail/(?P<teacher_id>\d+)$', TeacherDetail.as_view(),
         name='teacher_detail'),
 ]
