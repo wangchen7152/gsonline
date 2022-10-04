@@ -3,7 +3,8 @@
 __author__ = 'wang'
 
 from django.conf.urls import url
-from .views import AskUser, OrgList, OrgHome, CourseHome, TeacherHome, DesHome
+from organization.views import AskUser, OrgList, OrgHome, CourseHome, TeacherHome, DesHome, \
+    FavoriteHome
 
 urlpatterns = [
     url(r'^user_ask/$', AskUser.as_view(), name="user_ask"),
@@ -13,4 +14,5 @@ urlpatterns = [
     url(r'^teacher/(?P<org_id>\d+)$', TeacherHome.as_view(),
         name='org_teacher'),
     url(r'^des/(?P<org_id>\d+)$', DesHome.as_view(), name='des'),
+    url(r'^add_fav/$', FavoriteHome.as_view(), name='add_fav'),
 ]
