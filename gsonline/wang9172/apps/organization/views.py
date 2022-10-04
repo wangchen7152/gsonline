@@ -48,7 +48,8 @@ class OrgList(View):
         objects = all_org
         p = Paginator(objects, 5, request=request)
         orgs = p.page(page)
-
+        # 页面按钮
+        active = "city"
         return render(request, "org-list.html",
                       {"all_org": orgs,
                        "all_city": all_city,
@@ -58,6 +59,7 @@ class OrgList(View):
                        "catgory": str(ct),
                        "hot_orgs": hot_orgs,
                        "sort": sort,
+                       "active": active
                        })
 
 
