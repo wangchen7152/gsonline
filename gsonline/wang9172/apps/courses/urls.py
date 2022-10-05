@@ -5,8 +5,9 @@ __author__ = 'wang'
 
 
 from django.conf.urls import url
-from .views import CourseList
+from .views import CourseList, CourseDetail
 
 urlpatterns = [
-    url(r'^list/$', CourseList.as_view(), name="course_list")
+    url(r'^list/$', CourseList.as_view(), name="course_list"),
+    url(r'^course/(?P<course_id>\d+)$', CourseDetail.as_view(), name="detail")
 ]
