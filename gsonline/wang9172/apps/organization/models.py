@@ -35,10 +35,13 @@ class CourseOrg(models.Model):
     add_time = models.DateField(datetime.now)
     study_nums = models.IntegerField(default=0, verbose_name=u"学习人数")
     course_nums = models.IntegerField(default=0, verbose_name=u"课程数")
-
+    
     class Meta:
         verbose_name = u"机构"
         verbose_name_plural = verbose_name
+
+    def get_teacher_num(self):
+        return self.teacher_set.all().count()
 
     def __unicode__(self):
         return self.name

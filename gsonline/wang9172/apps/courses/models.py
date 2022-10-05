@@ -28,6 +28,11 @@ class Course(models.Model):
     click_num = models.IntegerField(default=0, verbose_name=u"点击数")
     add_time = models.DateField(default=datetime.now)
     course = models.ForeignKey(CourseOrg, verbose_name=u"课程机构")
+    course_category = models.CharField(max_length=12, choices=(
+        ("qd", "前端开发"), ("hd", "后端开发"), ("xnh", "虚拟化")), verbose_name="课程类别",
+                                       default='qd', blank=True, null=True)
+    tag = models.CharField(default="", verbose_name=u"课程标签", max_length=10)
+
 
     class Meta:
         verbose_name = u"课程"
@@ -35,6 +40,13 @@ class Course(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_lesson_nums(self):
+        return self.lesson_set.all().count()
+
+    def learn_users(self):
+        return self.usercourse_set.all()[:5]
+
 
 
 class Lesson(models.Model):

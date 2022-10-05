@@ -5,6 +5,8 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.generic import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+
+from operation.models import UserFavorite
 from .models import Course
 
 
@@ -33,4 +35,21 @@ class CourseList(View):
             "all_course": all_course,
             "sort": sort,
             "hot_courses": hot_courses,
+        })
+
+
+class CourseDetail(View):
+    def get(self, request, course_id):
+        course_detail = Course.objects.get(id=course_id)
+        course_detail.click_num += 1
+        course_detail.save()
+
+        tag = course_detail.tag
+        if tag:
+            relate_courses = Course.objects.filter(tag=tag)[:2]
+        else:
+            relate_courses = []
+        return render(request, "course-detail.html", {
+            "course_detail": course_detail,
+            "relate_courses": relate_courses,
         })
