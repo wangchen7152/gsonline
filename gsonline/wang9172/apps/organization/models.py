@@ -35,7 +35,7 @@ class CourseOrg(models.Model):
     add_time = models.DateField(datetime.now)
     study_nums = models.IntegerField(default=0, verbose_name=u"学习人数")
     course_nums = models.IntegerField(default=0, verbose_name=u"课程数")
-    
+
     class Meta:
         verbose_name = u"机构"
         verbose_name_plural = verbose_name
@@ -60,6 +60,8 @@ class Teacher(models.Model):
                               max_length=256, default='')
     year = models.IntegerField(verbose_name="年龄", default=66)
     points = models.CharField(max_length=128, verbose_name="教学特点", blank=True)
+    need_know = models.CharField(default="", verbose_name=u"老师忠告",
+                                 max_length=126)
 
     class Meta:
         verbose_name = u"教师"
@@ -67,3 +69,7 @@ class Teacher(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    # 获取机构下的所有讲师
+    def get_course(self):
+        return self.course_set.all()
