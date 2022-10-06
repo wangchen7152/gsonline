@@ -36,7 +36,7 @@
 						<ul class="parameter">
 							<li><span class="pram word3">时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;长：</span><span>{{ course_detail.learn_time }}</span></li>
                             <li><span class="pram word3">章&nbsp;节&nbsp;数：</span><span>{{ course_detail.get_lesson_nums }}</span></li>
-                            <li><span class="pram word3">课程类别：</span><span title="">{{ course_detail.course_category }}</span></li>
+                            <li><span class="pram word3">课程类别：</span><span title="">{{ course_detail.get_degree_display }}</span></li>
 							<li class="piclist"><span class="pram word4">学习用户：</span>
                                     {% for learn_user in course_detail.learn_users %}
                                     <span class="pic"><img width="40" height="40" src="{{ MEDIA_URL }}{{ learn_user.user.image}}"/></span>
