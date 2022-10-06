@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views.generic import View
+from django.db.models import Q
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Course, CourseResource
@@ -18,6 +19,15 @@ class CourseList(View):
 
         # 热门课程
         hot_courses = Course.objects.all().order_by("-click_num")[:3]
+
+        # 是否存在搜索功能
+        search_request = request.GET.get('keywords', '')
+        if search_request:
+            all_course = all_course.filter(
+                Q(desc__icontains=search_request) |
+                Q(name__icontains=search_request) |
+                Q(detail__icontains=search_request)
+            )
 
         # 排序
         sort = request.GET.get('sort', "")

@@ -1,4 +1,5 @@
 # _*_encoding:utf-8 _*_
+from django.db.models import Q
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.views.generic.base import View
@@ -17,6 +18,16 @@ class OrgList(View):
         all_org = CourseOrg.objects.all()
         all_city = City.objects.all()
         all_teacher = Teacher.objects.all()
+
+        # 是否存在搜索功能
+        search_request = request.GET.get('keywords', '')
+        if search_request:
+            all_org = all_org.filter(
+                Q(desc__icontains=search_request) |
+                Q(name__icontains=search_request) |
+                Q(address__icontains=search_request)
+            )
+
         # 机构排名
         hot_orgs = all_org.order_by("-click_nums")[:3]
 
