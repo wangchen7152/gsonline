@@ -32,10 +32,10 @@
                             </dl>
                             <div class="userdetail">
                             	<dl>
-	                                <dt><img width="80" height="80" src="../media/image/2016/12/default_big_14.png"/></dt>
+	                                <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.name }}"/></dt>
 	                                <dd>
 	                                    <h2>django</h2>
-	                                    <p>bobby</p>
+	                                    <p>{{ request.user.name }}</p>
 	                                </dd>
                                 </dl>
                                 <div class="btn">
@@ -60,7 +60,7 @@
     </header>
 </section>
 <!--crumbs start-->
-
+{% block custom_bread %}
     <section>
         <div class="wp">
             <ul  class="crumbs">
@@ -70,7 +70,7 @@
             </ul>
         </div>
     </section>
-
+{% endblock %}
 <section>
 	<div class="wp list personal_list">
 	<div class="left">

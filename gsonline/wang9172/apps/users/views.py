@@ -3,6 +3,8 @@ from django.db.models import Q
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
+
+from utils.mixin_utils import LoginRequiredMixin
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetPwd, ResetPwd
 from django.views.generic.base import View
@@ -141,9 +143,9 @@ class ModifyPwdView(View):
                           {"email": email, "reset_form": reset_pwd})
 
 
-class UserCenter(View):
+class UserCenter(LoginRequiredMixin, View):
     def get(self, request, user_id):
-        User = UserProfile.objects.get(id=user_id)
+        user = UserProfile.objects.get(id=user_id)
         return render(request, 'usercenter-info.html', {
-            "User": User
+            "user": user
         })
