@@ -75,7 +75,7 @@ class CourseInfo(LoginRequiredMixin, View):
         all_UserCourses = UserCourse.objects.filter(course=course_detail)
         # 获取所有用户ID
         user_id = [course.user.id for course in all_UserCourses]
-        # 根据用户ID查询所有用户学习的课程
+        # 根据用户ID将关联的课程均查出
         all_user_courses = UserCourse.objects.filter(user_id__in=user_id)
         # 获取所有课程的ID
         course_ids = [course.course.id for course in all_user_courses]
