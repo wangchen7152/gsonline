@@ -189,27 +189,28 @@
         </div>
     </section>
 {% endblock %}
-    <script>
-        $(function () {
-            $('#jsStayBtn').on('click', function () {
-                $.ajax({
-                    cache: false,
-                    type: "POST",
-                    url: "{% url "org:user_ask" %}",
-                    data: $('#jsStayForm').serialize(),
-                    async: true,
-                    success: function (data) {
-                        console.log(data)
-                        alert(data)
-                        if (data.status == "success") {
-                            $('#jsStayForm')[0].reset();
-                            alert("提交成功")
-                        } else if (data.status == 'fail') {
-                            $('#jsCompanyTips').html(data.msg)
-                        }
-                    },
-                });
-            });
-        })
 
-    </script>
+<script type="text/javascript">
+    $(function () {
+        $('#jsStayBtn').on('click', function () {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "{% url "org:user_ask" %}",
+                data: $('#jsStayForm').serialize(),
+                async: true,
+                success: function (data) {
+                    console.log(data)
+                    alert(data)
+                    if (data.status == "success") {
+                        $('#jsStayForm')[0].reset();
+                        alert("提交成功")
+                    } else if (data.status == 'fail') {
+                        $('#jsCompanyTips').html(data.msg)
+                    }
+                },
+            });
+        });
+    })
+
+</script>

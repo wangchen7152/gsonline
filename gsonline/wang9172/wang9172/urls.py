@@ -57,4 +57,8 @@ urlpatterns = [
 
     # 配置讲师
     url(r'^course/', include('courses.urls', namespace="course")),
+
+
+    # 用户个人中心
+    url(r'^user/', include('users.urls', namespace="user")),
 ]

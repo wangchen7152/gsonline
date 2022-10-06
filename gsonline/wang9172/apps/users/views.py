@@ -139,3 +139,11 @@ class ModifyPwdView(View):
         else:
             return render(request, "password_reset.html",
                           {"email": email, "reset_form": reset_pwd})
+
+
+class UserCenter(View):
+    def get(self, request, user_id):
+        User = UserProfile.objects.get(id=user_id)
+        return render(request, 'usercenter-info.html', {
+            "User": User
+        })
