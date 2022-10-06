@@ -18,6 +18,8 @@ class UserProfile(AbstractUser):
     phone = models.CharField(max_length=11, null=True, verbose_name="手机号")
     image = models.ImageField(upload_to="image/%Y/%m",
                               default=u"image/default.png", max_length=100)
+    address = models.CharField(max_length=64, verbose_name=u'地址', default='',
+                               blank=True)
 
     class Meta:
         verbose_name = "用户信息"
@@ -39,10 +41,8 @@ class EmailVerifyRecord(models.Model):
         verbose_name = u"邮箱验证码"
         verbose_name_plural = verbose_name
 
-
     def __unicode__(self):
         return self.code
-
 
 
 class Banner(models.Model):
