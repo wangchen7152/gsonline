@@ -26,7 +26,7 @@
                             </div>
                             <div class="btn">
                                 <span class="fl btn1 collectionbtn" id="jsLeftBtn">
-                                     收藏
+                                     {% if hahas_teacher_fav %}已经收藏{% else %}收藏{% endif %}
                                 </span>
                                 <span class="fr btn2 shareBtn bdsharebuttonbox"
                                       data-text="授课教师-李老师-慕学网"
@@ -63,7 +63,7 @@
                         <div class="group_list brief">
                         {% for course in all_Course %}
                             <div class="module1_5 box">
-                                <a href="course-detail.html">
+                                <a href="{% url 'course:detail' course.id%}">
                                     <img width="214" height="190" class="scrollLoading" src="{{ MEDIA_URL }}{{ course.image }}"/>
                                 </a>
                                 <div class="des">
@@ -98,15 +98,15 @@
                     <p>知名高校，权威教学</p>
                 </div>
                 <div class="pic">
-                    <a href="org-detail-homepage.html">
-                        <img width="150" height="80" src="{{ MEDIA_URL }}{{ teacher.name }}"/>
+                    <a href="{% url 'org:org_home' teacher.org.id %}">
+                        <img width="150" height="80" src="{{ MEDIA_URL }}{{ teacher.org.image}}"/>
                     </a>
                 </div>
-                <a href="org-detail-homepage.html">
+                <a href="{% url 'org:org_home' teacher.org.id %}">
                     <h2 class="center">{{ teacher.org }}</h2>
                 </a>
                 <p class="center tell">{{ teacher.org.address }}</p>
-                <a class="btn" id="jsRightBtn">收藏</a>
+                <a class="btn" id="jsRightBtn">{% if has_fav_org  %}已经收藏{% else %}收藏{% endif %}</a>
             </div>
             </div>
             <div class="butler_detail_cont">
@@ -116,13 +116,13 @@
                         {% for teacher in sort_teachers %}
                         <dl class="des">
                             <span class="num fl">1</span>
-                            <a href="{% url 'teacher:teacher_detail' teacher.id %}">
+                            <a href="{% url 'org:teacher_detail' teacher.id %}">
                                 <dt>
                                     <img width="50" height="50" class="scrollLoading" src="{{ MEDIA_URL }}{{ teacher.image }}"/>
                                 </dt>
                             </a>
                             <dd>
-                                <a href="/org/teacher/detail/1/">
+                                <a href="{% url 'org:teacher_detail' teacher.id %}">
                                     <h1 title="bobby">{{ teacher.name }}</h1>
                                 </a>
                                 <p>工作年限：<span>{{ teacher.work_year }}</span></p>
@@ -137,31 +137,40 @@
 	</div>
     </section>
 {% endblock %}
-{% block custom_js %}
-    <script>
-        $(function () {
-            $('#jsStayBtn').on('click', function () {
-                $.ajax({
-                    cache: false,
-                    type: "POST",
-                    url: "{% url "org:user_ask" %}",
-                    data: $('#jsStayForm').serialize(),
-                    async: true,
-                    success: function (data) {
-                        console.log(data)
-                        alert(data)
-                        if (data.status == "success") {
-                            $('#jsStayForm')[0].reset();
-                            alert("提交成功")
-                        } else if (data.status == 'fail') {
-                            $('#jsCompanyTips').html(data.msg)
-                        }
-                    },
-                });
-            });
-        })
 
-    </script>
 
-{% endblock %}
+<script>
+function add_fav(current_elem, fav_id, fav_type){
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url:"{% url 'org:add_fav' %}",
+        data:{'fav_id':fav_id, 'fav_type':fav_type},
+        async: true,
+        beforeSend:function(xhr, settings){
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function(data) {
+            if(data.status == 'fail'){
+                if(data.msg == '用户未登录'){
+                    window.location.href="{% url 'login' %}";
+                }else{
+                    alert(data.msg)
+                }
 
+            }else if(data.status == 'success'){
+                current_elem.text(data.msg)
+            }
+        },
+    });
+}
+
+$('#jsLeftBtn').on('click', function(){
+    add_fav($(this), {{ teacher.id }} 3);
+});
+
+$('#jsRightBtn').on('click', function(){
+    add_fav($(this),{{ teacher.org.id }} 2);
+});
+
+</script>
