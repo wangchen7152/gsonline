@@ -28,18 +28,18 @@
                         <div class="personal">
                             <dl class="user fr">
                                 <dd>bobby<img class="down fr" src="{% static 'images/top_down.png' %}"/></dd>
-                                <dt><img width="20" height="20" src="{% static 'media/image/default_big_14.png' %}"/></dt>
+                                <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
                             </dl>
                             <div class="userdetail">
                             	<dl>
-	                                <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.name }}"/></dt>
+	                                <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
 	                                <dd>
 	                                    <h2>django</h2>
 	                                    <p>{{ request.user.name }}</p>
 	                                </dd>
                                 </dl>
                                 <div class="btn">
-	                                <a class="personcenter fl" href="usercenter-info.html">进入个人中心</a>
+	                                <a class="personcenter fl" href="{% url 'user:user_center' request.user.id %}">进入个人中心</a>
 	                                <a class="fr" href="/logout/">退出</a>
                                 </div>
                             </div>
@@ -188,21 +188,26 @@
     </div>
     <div class="resetpwdbox dialogbox" id="jsResetDialog">
         <h1>修改密码</h1>
-        <div class="close jsCloseDialog"><img src="../images/dig_close.png"/></div>
+        <div class="close jsCloseDialog"><img src="/static/images/dig_close.png"/></div>
         <div class="cont">
             <form id="jsResetPwdForm" autocomplete="off">
                 <div class="box">
+                    <span class="word2" >原&nbsp;&nbsp;密&nbsp;&nbsp;码</span>
+                    <input type="password" id="pwd_old" name="password_old" placeholder="请输入原来密码"/>
+                </div>
+                <div class="box">
                     <span class="word2" >新&nbsp;&nbsp;密&nbsp;&nbsp;码</span>
-                    <input type="password" id="pwd" name="password1" placeholder="6-20位非中文字符"/>
+                    <input type="password" id="pwd" name="password1" placeholder="请输入新密码"/>
                 </div>
                 <div class="box">
                     <span class="word2" >确定密码</span>
-                    <input type="password" id="repwd" name="password2" placeholder="6-20位非中文字符"/>
+                    <input type="password" id="repwd" name="password2" placeholder="请输入确认密码"/>
                 </div>
                 <div class="error btns" id="jsResetPwdTips"></div>
                 <div class="button">
                     <input id="jsResetPwdBtn" type="button" value="提交" />
                 </div>
+                {% csrf_token %}
                 <input type='hidden' name='csrfmiddlewaretoken' value='DaP7IUKm9FA9nELA9YUlYYWpyIDdCiIP' />
             <input type='hidden' name='csrfmiddlewaretoken' value='799Y6iPeEDNSGvrTu3noBrO4MBLv6enY' />
             </form>
@@ -263,6 +268,7 @@
                 <input type="hidden" name="mobile" id="jsInpResetMobil" />
                 <input id="jsSetNewPwdBtn" type="button" value="提交" />
             </div>
+            {% csrf_token %}
             <input type='hidden' name='csrfmiddlewaretoken' value='DaP7IUKm9FA9nELA9YUlYYWpyIDdCiIP' />
         </form>
     </div>

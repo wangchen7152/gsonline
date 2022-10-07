@@ -1,12 +1,15 @@
 # _*_ encoding:utf-8 _*_
+import json
+
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
 
 from utils.mixin_utils import LoginRequiredMixin
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm, ForgetPwd, ResetPwd
+from .forms import LoginForm, RegisterForm, ForgetPwd, ResetPwd, UploadImageForm
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from utils.email_send import send_register_email
@@ -149,3 +152,54 @@ class UserCenter(LoginRequiredMixin, View):
         return render(request, 'usercenter-info.html', {
             "user": user
         })
+
+
+class UploadUserImage(LoginRequiredMixin, View):
+    def post(self, request):
+        image_form = UploadImageForm(request.POST, request.FILES,
+                                     instance=request.user)
+        if image_form.is_valid():
+            image_form.save()
+            return HttpResponse('{"status":"success","msg":"头像修改成功"}',
+                                content_type='application/json')
+        else:
+            return HttpResponse('{"status":"fail","msg":"头像修改失败"}',
+                                content_type='application/json')
+
+
+class ChangePwdView(LoginRequiredMixin, View):
+    """
+    个人中心修改用户密码
+    """
+
+    def post(self, request):
+        reset_pwd = ResetPwd(request.POST)
+        if reset_pwd.is_valid():
+            password_old = request.POST.get("password_old")
+            if authenticate(username=request.user.username,
+                            password=password_old):
+                password1 = request.POST.get("password1")
+                password2 = request.POST.get("password2")
+                if password_old != password1 or password_old != password2:
+                    if password1 != password2:
+                        return HttpResponse('{"status":"fail","msg":"两次密码不同"}',
+                                            content_type='application/json')
+                    else:
+                        user = request.user
+                        user.password = make_password(password1)
+                        user.save()
+                        return HttpResponse(
+                            '{"status":"success","msg":"修改成功，请重新登录"}',
+                            content_type='application/json')
+                else:
+                    return HttpResponse(
+                        '{"status":"success","msg":"修改的密码不能同原密码一致"}',
+                        content_type='application/json')
+
+            else:
+                return HttpResponse('{"status":"fail","msg":"原密码错误"}',
+                                    content_type='application/json')
+
+        else:
+            return HttpResponse(json.dumps(reset_pwd.errors),
+                                content_type='application/json')
