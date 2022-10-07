@@ -73,7 +73,7 @@ class Lesson(models.Model):
 
 
 class Video(models.Model):
-    lesson = models.ForeignKey(Lesson, verbose_name=u"课程")
+    course = models.ForeignKey(Lesson, verbose_name=u"课程")
     name = models.CharField(max_length=64, verbose_name=u"视频")
     url = models.CharField(max_length=64, verbose_name=u"访问地址", default="")
     add_time = models.DateField(default=datetime.now, verbose_name=u"添加时间")

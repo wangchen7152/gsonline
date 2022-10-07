@@ -4,7 +4,7 @@ import json
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 
 from utils.mixin_utils import LoginRequiredMixin
@@ -203,3 +203,11 @@ class ChangePwdView(LoginRequiredMixin, View):
         else:
             return HttpResponse(json.dumps(reset_pwd.errors),
                                 content_type='application/json')
+
+
+class LogOutView(View):
+    def get(self, request):
+        logout(request=request)
+        return render(request, 'index.html', {
+
+        })

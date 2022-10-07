@@ -19,7 +19,7 @@ from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from django.views.static import serve
 from users.views import LoginView, RegisterView, ActiveView, ForgetPassword, \
-    ResetPassword, ModifyPwdView
+    ResetPassword, ModifyPwdView, LogOutView
 from organization.views import OrgList
 from wang9172.settings import MEDIA_ROOT
 
@@ -32,6 +32,8 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html"), name='index'),
     # 登录页面
     url(r'^login/$', LoginView.as_view(), name='login'),
+    # 退出登录页面
+    url(r'^LoginOut/$', LogOutView.as_view(), name='LoginOut'),
     # 注册页面
     url(r'^register/$', RegisterView.as_view(), name='register'),
     # 忘记密码
