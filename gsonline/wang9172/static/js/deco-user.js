@@ -86,11 +86,13 @@ $(function(){
             cache: false,
             type: "POST",
             dataType:'json',
-            url:"/users/update/pwd/",
+            url:"/user/update/pwd/",
             data:$('#jsResetPwdForm').serialize(),
             async: true,
             success: function(data) {
-                if(data.password1){
+                if(data.password_old){
+                    Dml.fun.showValidateError($("#pwd_old"), data.password_old);
+                }else if(data.password1){
                     Dml.fun.showValidateError($("#pwd"), data.password1);
                 }else if(data.password2){
                     Dml.fun.showValidateError($("#repwd"), data.password2);
@@ -101,6 +103,7 @@ $(function(){
                     });
                     Dml.fun.winReload();
                 }else if(data.msg){
+                    Dml.fun.showValidateError($("#pwd_old"), data.msg);
                     Dml.fun.showValidateError($("#pwd"), data.msg);
                     Dml.fun.showValidateError($("#repwd"), data.msg);
                 }
