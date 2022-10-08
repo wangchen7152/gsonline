@@ -27,7 +27,7 @@
 
                         <div class="personal">
                             <dl class="user fr">
-                                <dd>bobby<img class="down fr" src="{% static 'images/top_down.png' %}"/></dd>
+                                <dd>{{ request.user.username }}<img class="down fr" src="{% static 'images/top_down.png' %}"/></dd>
                                 <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
                             </dl>
                             <div class="userdetail">
@@ -35,7 +35,7 @@
 	                                <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
 	                                <dd>
 	                                    <h2>django</h2>
-	                                    <p>{{ request.user.name }}</p>
+	                                    <p>{{ request.user.username }}</p>
 	                                </dd>
                                 </dl>
                                 <div class="btn">
@@ -215,7 +215,7 @@
     </div>
     <div class="dialogbox changeemai1 changephone" id="jsChangeEmailDialog">
         <h1>修改邮箱</h1>
-        <div class="close jsCloseDialog"><img src="../images/dig_close.png"/></div>
+        <div class="close jsCloseDialog"><img src="{% static 'images/dig_close.png' %}"/></div>
         <p>请输入新的邮箱地址</p>
         <form id="jsChangeEmailForm" autocomplete="off">
             <div class="box">
@@ -231,6 +231,7 @@
             </div>
             <input type='hidden' name='csrfmiddlewaretoken' value='DaP7IUKm9FA9nELA9YUlYYWpyIDdCiIP' />
         <input type='hidden' name='csrfmiddlewaretoken' value='799Y6iPeEDNSGvrTu3noBrO4MBLv6enY' />
+            {% csrf_token %}
         </form>
     </div>
 

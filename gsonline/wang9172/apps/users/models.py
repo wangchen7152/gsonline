@@ -33,7 +33,7 @@ class EmailVerifyRecord(models.Model):
     code = models.CharField(max_length=20, verbose_name=u"验证码")
     email = models.EmailField(verbose_name=u"邮箱")
     send_type = models.CharField(max_length=126, choices=(
-        ("register", "注册"), ("forget", "找回密码")),
+        ("register", "注册"), ("forget", "找回密码"), ('change_email', "修改邮箱")),
                                  verbose_name=u"验证码类型")
     send_time = models.DateField(default=datetime.now, verbose_name=u"发送时间")
 

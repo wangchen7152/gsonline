@@ -34,3 +34,7 @@ class UploadImageForm(forms.ModelForm):
         model = UserProfile
         fields = ['image']
 
+
+class ResetEmail(forms.Form):
+    email = forms.EmailField(required=True, max_length=32)
+
