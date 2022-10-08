@@ -10,7 +10,10 @@ from wang9172.settings import EMAIL_FROM
 
 def send_register_email(email, send_type="register"):
     email_record = EmailVerifyRecord()
-    code = generate_random_cord(16)
+    if send_type == "change_email":
+        code = generate_random_cord(4)
+    else:
+        code = generate_random_cord(16)
     email_record.code = code
     email_record.email = email
     email_record.send_type = send_type
@@ -25,14 +28,28 @@ def send_register_email(email, send_type="register"):
 
         send_status = send_mail(email_tile, email_body, EMAIL_FROM, [email])
         if send_status:
-            pass
+            return True
+        else:
+            return False
     if send_type == "forget":
         email_tile = "工商在线密码重置连接"
         email_body = "请点击下列链接重置你的密码:http://127.0.0.1:8000/reset/%s" % (
             email_record)
         send_status = send_mail(email_tile, email_body, EMAIL_FROM, [email])
         if send_status:
-            pass
+            return True
+        else:
+            return False
+
+    if send_type == "change_email":
+        email_tile = "工商在线密码重置邮箱"
+        email_body = "请点击下列链接重置你的密码:http://127.0.0.1:8000/change_email/%s" % (
+            email_record)
+        send_status = send_mail(email_tile, email_body, EMAIL_FROM, [email])
+        if send_status:
+            return True
+        else:
+            return False
 
 
 def generate_random_cord(randomlength=8):

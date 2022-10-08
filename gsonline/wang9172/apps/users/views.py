@@ -9,7 +9,8 @@ from django.contrib.auth.backends import ModelBackend
 
 from utils.mixin_utils import LoginRequiredMixin
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm, ForgetPwd, ResetPwd, UploadImageForm
+from .forms import LoginForm, RegisterForm, ForgetPwd, ResetPwd, \
+    UploadImageForm, ResetEmail
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from utils.email_send import send_register_email
@@ -39,7 +40,7 @@ class LoginView(View):
             user_name = request.POST.get("username")
             pass_word = request.POST.get("password")
             user = authenticate(username=user_name, password=pass_word)
-            is_active = UserProfile.objects.get(username=user_name).is_active
+            is_active = UserProfile.objects.get(username=user.username).is_active
             if user is not None:
                 if is_active == True:
                     login(request, user)
@@ -211,3 +212,45 @@ class LogOutView(View):
         return render(request, 'index.html', {
 
         })
+
+
+class UserCenterSendEmail(LoginRequiredMixin, View):
+    def post(self, request):
+        email = request.POST.get('email', '')
+        if not UserProfile.objects.filter(email=email):
+            email_form = ResetEmail(request.POST)
+            if email_form.is_valid():
+                status_check = send_register_email(email, "change_email")
+                if status_check == True:
+                    return HttpResponse(
+                        '{"status":"success","msg":"邮箱验证码发送成功"}',
+                        content_type='application/json')
+                else:
+                    return HttpResponse('{"status":"fail","msg":"邮箱发送失败"}',
+                                        content_type='application/json')
+
+            else:
+                return HttpResponse('{"status":"fail","msg":"邮箱不符合规格"}',
+                                    content_type='application/json')
+        else:
+            return HttpResponse('{"status":"fail","msg":"邮箱已存在"}',
+                                content_type='application/json')
+
+
+class CheckCode(LoginRequiredMixin, View):
+    def post(self, request):
+        new_email = request.POST.get('email', '')
+        new_code = request.POST.get("code", "")
+        email_code = EmailVerifyRecord.objects.get(email=new_email,
+                                                   code=new_code,
+                                                   send_type=u'change_email').code
+        if email_code:
+            user = UserProfile.objects.get(id=request.user.id)
+            user.email = new_email
+            user.save()
+            return HttpResponse(
+                '{"status":"success","msg":"邮箱验证成功，新邮箱地址已修改"}',
+                content_type='application/json')
+        else:
+            return HttpResponse('{"status":"fail","msg":"验证码验证错误"}',
+                                content_type='application/json')
