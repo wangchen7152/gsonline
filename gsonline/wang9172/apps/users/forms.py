@@ -38,3 +38,8 @@ class UploadImageForm(forms.ModelForm):
 class ResetEmail(forms.Form):
     email = forms.EmailField(required=True, max_length=32)
 
+
+class UploadUserForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['nick_name', 'birthday', 'gender', 'address', 'phone']

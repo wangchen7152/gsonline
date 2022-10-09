@@ -10,7 +10,7 @@ from django.contrib.auth.backends import ModelBackend
 from utils.mixin_utils import LoginRequiredMixin
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetPwd, ResetPwd, \
-    UploadImageForm, ResetEmail
+    UploadImageForm, ResetEmail, UploadUserForm
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from utils.email_send import send_register_email
@@ -40,7 +40,8 @@ class LoginView(View):
             user_name = request.POST.get("username")
             pass_word = request.POST.get("password")
             user = authenticate(username=user_name, password=pass_word)
-            is_active = UserProfile.objects.get(username=user.username).is_active
+            is_active = UserProfile.objects.get(
+                username=user.username).is_active
             if user is not None:
                 if is_active == True:
                     login(request, user)
@@ -155,6 +156,32 @@ class UserCenter(LoginRequiredMixin, View):
         })
 
 
+class UpdateUserInfo(LoginRequiredMixin, View):
+    """
+    根据表单修改用户数据
+    """
+    def post(self, request):
+        # user_info = UserProfile.objects.get(id=request.user.id)
+        # _nick_name = request.POST.get("nick_name", user_info.nick_name)
+        # _address = request.POST.get("address", user_info.address)
+        # _birthday = request.POST.get("birthday", user_info.birthday)
+        # _gender = request.POST.get("gender", user_info.gender)
+        # _phone = request.POST.get("phone", user_info.phone)
+        user_info = UploadUserForm(request.POST, instance=request.user)
+        if user_info.is_valid():
+            # user_info.nick_name = _nick_name
+            # user_info.address = _address
+            # user_info.birthday = _birthday
+            # user_info.gender = _gender
+            # user_info.phone = _phone
+            user_info.save()
+            return HttpResponse('{"status":"success","msg":"用户信息修改成功"}',
+                                content_type='application/json')
+        else:
+            return HttpResponse(json.dumps(user_info.errors),
+                                content_type='application/json')
+
+
 class UploadUserImage(LoginRequiredMixin, View):
     def post(self, request):
         image_form = UploadImageForm(request.POST, request.FILES,
@@ -218,6 +245,7 @@ class UserCenterSendEmail(LoginRequiredMixin, View):
     """
     用户个人中心修改密码发送邮箱验证码
     """
+
     def post(self, request):
         email = request.POST.get('email', '')
         if not UserProfile.objects.filter(email=email):
@@ -244,6 +272,7 @@ class CheckCode(LoginRequiredMixin, View):
     """
     用户个人中心修改密码验证验证码的正确性
     """
+
     def post(self, request):
         new_email = request.POST.get('email', '')
         new_code = request.POST.get("code", "")
