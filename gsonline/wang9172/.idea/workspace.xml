@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="62f8774d-c407-40b8-95bd-3c2d7a8546eb" name="Default Changelist" comment="" />
+=======
+    <list default="true" id="62f8774d-c407-40b8-95bd-3c2d7a8546eb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/users/views.py" afterDir="false" />
+    </list>
+>>>>>>> 862fc7d652d49e8c9689a0b0a4cf3a2bf481359e
     <ignored path="$PROJECT_DIR$/venv/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,7 +37,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/apps/users/views.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="1020">
+=======
+            <state relative-caret-position="157">
+>>>>>>> 862fc7d652d49e8c9689a0b0a4cf3a2bf481359e
               <caret line="242" column="42" lean-forward="true" selection-start-line="242" selection-start-column="42" selection-end-line="242" selection-end-column="42" />
               <folding>
                 <element signature="e#25#36#0" expanded="true" />
@@ -411,17 +422,29 @@
       <workItem from="1665114619061" duration="8827000" />
       <workItem from="1665143902174" duration="883000" />
       <workItem from="1665228567311" duration="4752000" />
+<<<<<<< HEAD
       <workItem from="1665314905199" duration="647000" />
+=======
+      <workItem from="1665314905199" duration="138000" />
+>>>>>>> 862fc7d652d49e8c9689a0b0a4cf3a2bf481359e
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="93347000" />
+=======
+    <option name="totallyTimeSpent" value="92838000" />
+>>>>>>> 862fc7d652d49e8c9689a0b0a4cf3a2bf481359e
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
+<<<<<<< HEAD
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49716714" visible="true" weight="0.18297587" />
+=======
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49716714" visible="true" weight="0.18297587" />
+>>>>>>> 862fc7d652d49e8c9689a0b0a4cf3a2bf481359e
       <window_info id="Structure" order="1" sideWeight="0.50328225" side_tool="true" weight="0.15459883" />
       <window_info id="Favorites" order="2" sideWeight="0.5028329" side_tool="true" weight="0.21983914" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -878,7 +901,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/users/views.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="1020">
+=======
+        <state relative-caret-position="157">
+>>>>>>> 862fc7d652d49e8c9689a0b0a4cf3a2bf481359e
           <caret line="242" column="42" lean-forward="true" selection-start-line="242" selection-start-column="42" selection-end-line="242" selection-end-column="42" />
           <folding>
             <element signature="e#25#36#0" expanded="true" />
