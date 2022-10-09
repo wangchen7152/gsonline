@@ -215,6 +215,9 @@ class LogOutView(View):
 
 
 class UserCenterSendEmail(LoginRequiredMixin, View):
+    """
+    用户个人中心修改密码发送邮箱验证码
+    """
     def post(self, request):
         email = request.POST.get('email', '')
         if not UserProfile.objects.filter(email=email):
@@ -238,6 +241,9 @@ class UserCenterSendEmail(LoginRequiredMixin, View):
 
 
 class CheckCode(LoginRequiredMixin, View):
+    """
+    用户个人中心修改密码验证验证码的正确性
+    """
     def post(self, request):
         new_email = request.POST.get('email', '')
         new_code = request.POST.get("code", "")
