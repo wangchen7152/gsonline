@@ -5,7 +5,7 @@ __author__ = 'wang'
 from django.conf.urls import url
 from .views import UserCenter, UploadUserImage, ChangePwdView, \
     UserCenterSendEmail, CheckCode, UpdateUserInfo, UserCourseDetail, \
-    UserFavOrg, UserFavCourse, UserFavTeacher
+    UserFavOrg, UserFavCourse, UserFavTeacher, MyMessage
 
 urlpatterns = [
     url(r'^center/(?P<user_id>\d+)$', UserCenter.as_view(),
@@ -28,4 +28,6 @@ urlpatterns = [
     url(r'^fav/course/$', UserFavCourse.as_view(), name='fav_course'),
     # 用户收藏的老师
     url(r'^fav/teacher/$', UserFavTeacher.as_view(), name='fav_teacher'),
+    # 个人中心-我的信息
+    url(r'^my/message/$', MyMessage.as_view(), name='my_message'),
 ]

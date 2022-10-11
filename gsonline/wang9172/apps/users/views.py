@@ -12,12 +12,13 @@ from utils.mixin_utils import LoginRequiredMixin
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetPwd, ResetPwd, \
     UploadImageForm, ResetEmail, UploadUserForm
-from operation.models import UserCourse, UserFavorite
-from organization.models import CourseOrg,Teacher
+from operation.models import UserCourse, UserFavorite, UserMessage
+from organization.models import CourseOrg, Teacher
 from courses.models import Course
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from utils.email_send import send_register_email
+from driver.register_message import get_log_name
 
 
 # Create your views here.
@@ -353,4 +354,25 @@ class UserFavTeacher(LoginRequiredMixin, View):
         return render(request, 'usercenter-fav-teacher.html', {
             "teacher_list": teacher_list,
             "current": current
+        })
+
+
+@get_log_name(rigister_name=u'查看个人信息')
+class MyMessage(LoginRequiredMixin, View):
+    """
+    我的消息
+    """
+
+    def get(self, request):
+        messages = UserMessage.objects.filter(user=request.user.id)
+
+        # 将我的消息进行分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+        p = Paginator(messages, 5, request=request)
+        messages = p.page(page)
+        return render(request, 'usercenter-message.html', {
+            "messages": messages,
         })

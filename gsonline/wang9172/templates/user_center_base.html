@@ -79,7 +79,7 @@
             <li class="{% ifequal current "Course" %}active2{% endifequal %}"><a href="{% url 'user:course' %}">我的课程</a></li>
             <li class="{% if "fav" in current %}active2{% endif %}"><a href="{% url 'user:fav_org' %}">我的收藏</a></li>
             <li >
-                <a href="usercenter-message.html" style="position: relative;">
+                <a href="{% url 'user:my_message' %}" style="position: relative;">
                     我的消息
                 </a>
             </li>
