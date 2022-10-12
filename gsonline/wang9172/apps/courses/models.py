@@ -32,7 +32,7 @@ class Course(models.Model):
         ("qd", "前端开发"), ("hd", "后端开发"), ("xnh", "虚拟化")), verbose_name="课程类别",
                                        default='qd', blank=True, null=True)
     tag = models.CharField(default="", verbose_name=u"课程标签", max_length=10)
-
+    is_banner = models.BooleanField(default=False, verbose_name=u'是否轮播')
 
     class Meta:
         verbose_name = u"课程"

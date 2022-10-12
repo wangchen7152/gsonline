@@ -56,6 +56,8 @@ class TeacherList(View):
 class TeacherDetail(View):
     def get(self, request, teacher_id):
         teacher = Teacher.objects.get(id=teacher_id)
+        teacher.click_nums += 1
+        teacher.save()
         # Course_org = Teacher.objects.get(org=teacher.org)
         all_course = Course_teacher.objects.filter(teacher=teacher)
 

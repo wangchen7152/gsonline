@@ -35,6 +35,7 @@ class CourseOrg(models.Model):
     add_time = models.DateField(datetime.now)
     study_nums = models.IntegerField(default=0, verbose_name=u"学习人数")
     course_nums = models.IntegerField(default=0, verbose_name=u"课程数")
+    is_banner = models.BooleanField(default=False, verbose_name=u'受否轮播')
 
     class Meta:
         verbose_name = u"机构"

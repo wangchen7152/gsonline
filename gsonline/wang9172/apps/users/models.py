@@ -18,8 +18,7 @@ class UserProfile(AbstractUser):
     phone = models.CharField(max_length=11, null=True, verbose_name="手机号")
     image = models.ImageField(upload_to="image/%Y/%m",
                               default=u"image/default.png", max_length=100)
-    address = models.CharField(max_length=64, verbose_name=u'地址', default='',
-                               blank=True)
+    address = models.CharField(max_length=64, verbose_name=u'地址')
 
     class Meta:
         verbose_name = "用户信息"
@@ -27,6 +26,11 @@ class UserProfile(AbstractUser):
 
     def __unicode__(self):
         return self.username
+
+    def get_message_num(self):
+        from operation.models import UserMessage
+        messages = UserMessage.objects.filter(user=self.id, has_read=0).count()
+        return messages
 
 
 class EmailVerifyRecord(models.Model):

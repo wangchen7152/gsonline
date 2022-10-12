@@ -1,16 +1,20 @@
 # _*_ encoding:utf-8 _*_
 import json
 
+from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 
 from utils.mixin_utils import LoginRequiredMixin
-from .models import UserProfile, EmailVerifyRecord
+from .models import UserProfile, EmailVerifyRecord, Banner
 from .forms import LoginForm, RegisterForm, ForgetPwd, ResetPwd, \
     UploadImageForm, ResetEmail, UploadUserForm
+from operation.models import UserCourse, UserFavorite, UserMessage
+from organization.models import CourseOrg, Teacher
+from courses.models import Course
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from utils.email_send import send_register_email
@@ -151,8 +155,10 @@ class ModifyPwdView(View):
 class UserCenter(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = UserProfile.objects.get(id=user_id)
+        current = "center"
         return render(request, 'usercenter-info.html', {
-            "user": user
+            "user": user,
+            "current": current,
         })
 
 
@@ -160,6 +166,7 @@ class UpdateUserInfo(LoginRequiredMixin, View):
     """
     根据表单修改用户数据
     """
+
     def post(self, request):
         # user_info = UserProfile.objects.get(id=request.user.id)
         # _nick_name = request.POST.get("nick_name", user_info.nick_name)
@@ -234,11 +241,15 @@ class ChangePwdView(LoginRequiredMixin, View):
 
 
 class LogOutView(View):
+    """
+    用户登出
+    """
+
     def get(self, request):
         logout(request=request)
-        return render(request, 'index.html', {
 
-        })
+        from django.core.urlresolvers import reverse
+        return HttpResponseRedirect(reverse('index'))
 
 
 class UserCenterSendEmail(LoginRequiredMixin, View):
@@ -289,3 +300,103 @@ class CheckCode(LoginRequiredMixin, View):
         else:
             return HttpResponse('{"status":"fail","msg":"验证码验证错误"}',
                                 content_type='application/json')
+
+
+class UserCourseDetail(LoginRequiredMixin, View):
+    """
+    用户学习的课程
+    """
+
+    def get(self, request):
+        course_list = UserCourse.objects.filter(user=request.user)
+        current = "Course"
+        # 将我的课程进行分页
+        # try:
+        #     page = request.GET.get('page', 1)
+        # except PageNotAnInteger:
+        #     page = 1
+        # p = Paginator(course_list, 5, request=request)
+        # course_list = p.page(page)
+
+        return render(request, 'usercenter-mycourse.html', {
+            "course_list": course_list,
+            "current": current,
+        })
+
+
+class UserFavOrg(LoginRequiredMixin, View):
+    def get(self, request):
+        current = 'fav_org'
+        fav_list = UserFavorite.objects.filter(user=request.user, fav_type=2)
+        id_list = [fav.fav_id for fav in fav_list]
+        org_list = CourseOrg.objects.filter(id__in=id_list)
+        return render(request, 'usercenter-fav-org.html', {
+            "org_list": org_list,
+            "current": current
+        })
+
+
+class UserFavCourse(LoginRequiredMixin, View):
+    def get(self, request):
+        current = 'fav_course'
+        fav_list = UserFavorite.objects.filter(user=request.user, fav_type=1)
+        id_list = [fav.fav_id for fav in fav_list]
+        course_list = Course.objects.filter(id__in=id_list)
+        return render(request, 'usercenter-fav-course.html', {
+            "course_list": course_list,
+            "current": current
+        })
+
+
+class UserFavTeacher(LoginRequiredMixin, View):
+    def get(self, request):
+        current = 'fav_teacher'
+        fav_list = UserFavorite.objects.filter(user=request.user, fav_type=3)
+        id_list = [fav.fav_id for fav in fav_list]
+        teacher_list = Teacher.objects.filter(id__in=id_list)
+        return render(request, 'usercenter-fav-teacher.html', {
+            "teacher_list": teacher_list,
+            "current": current
+        })
+
+
+class MyMessage(LoginRequiredMixin, View):
+    """
+    我的消息
+    """
+
+    def get(self, request):
+        messages = UserMessage.objects.filter(user=request.user.id)
+
+        # 将阅读后的信息置为已读
+        for msg in messages:
+            user_msg = UserMessage.objects.get(id=msg.id)
+            user_msg.has_read = 1
+            user_msg.save()
+
+        # 将我的消息进行分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+        p = Paginator(messages, 5, request=request)
+        messages = p.page(page)
+
+        return render(request, 'usercenter-message.html', {
+            "messages": messages,
+        })
+
+
+class IndexView(View):
+    def get(self, request):
+        all_banners = Banner.objects.all().order_by('-index')
+        courses = Course.objects.filter(is_banner=False)[0:6]
+        banner_couses = Course.objects.filter(is_banner=True)[0:3]
+        course_orgs = CourseOrg.objects.filter(is_banner=False)[0:15]
+        return render(request, 'index.html', {
+            "all_banners": all_banners,
+            "courses": courses,
+            "banner_couses": banner_couses,
+            "course_orgs": course_orgs,
+
+        })
