@@ -3,13 +3,13 @@ import json
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 
 from utils.mixin_utils import LoginRequiredMixin
-from .models import UserProfile, EmailVerifyRecord
+from .models import UserProfile, EmailVerifyRecord, Banner
 from .forms import LoginForm, RegisterForm, ForgetPwd, ResetPwd, \
     UploadImageForm, ResetEmail, UploadUserForm
 from operation.models import UserCourse, UserFavorite, UserMessage
@@ -18,7 +18,6 @@ from courses.models import Course
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from utils.email_send import send_register_email
-from driver.register_message import get_log_name
 
 
 # Create your views here.
@@ -242,11 +241,15 @@ class ChangePwdView(LoginRequiredMixin, View):
 
 
 class LogOutView(View):
+    """
+    用户登出
+    """
+
     def get(self, request):
         logout(request=request)
-        return render(request, 'index.html', {
 
-        })
+        from django.core.urlresolvers import reverse
+        return HttpResponseRedirect(reverse('index'))
 
 
 class UserCenterSendEmail(LoginRequiredMixin, View):
@@ -357,7 +360,6 @@ class UserFavTeacher(LoginRequiredMixin, View):
         })
 
 
-@get_log_name(rigister_name=u'查看个人信息')
 class MyMessage(LoginRequiredMixin, View):
     """
     我的消息
@@ -366,6 +368,12 @@ class MyMessage(LoginRequiredMixin, View):
     def get(self, request):
         messages = UserMessage.objects.filter(user=request.user.id)
 
+        # 将阅读后的信息置为已读
+        for msg in messages:
+            user_msg = UserMessage.objects.get(id=msg.id)
+            user_msg.has_read = 1
+            user_msg.save()
+
         # 将我的消息进行分页
         try:
             page = request.GET.get('page', 1)
@@ -373,6 +381,22 @@ class MyMessage(LoginRequiredMixin, View):
             page = 1
         p = Paginator(messages, 5, request=request)
         messages = p.page(page)
+
         return render(request, 'usercenter-message.html', {
             "messages": messages,
+        })
+
+
+class IndexView(View):
+    def get(self, request):
+        all_banners = Banner.objects.all().order_by('-index')
+        courses = Course.objects.filter(is_banner=False)[0:6]
+        banner_couses = Course.objects.filter(is_banner=True)[0:3]
+        course_orgs = CourseOrg.objects.filter(is_banner=False)[0:15]
+        return render(request, 'index.html', {
+            "all_banners": all_banners,
+            "courses": courses,
+            "banner_couses": banner_couses,
+            "course_orgs": course_orgs,
+
         })
