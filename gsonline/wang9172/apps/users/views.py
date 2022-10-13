@@ -49,7 +49,8 @@ class LoginView(View):
             if user is not None:
                 if is_active == True:
                     login(request, user)
-                    return render(request, "index.html", {'user': user})
+                    from django.core.urlresolvers import reverse
+                    return HttpResponseRedirect(reverse('index'))
                 else:
                     return render(request, "login.html", {"msg": "用户未激活"})
             else:
@@ -400,3 +401,33 @@ class IndexView(View):
             "course_orgs": course_orgs,
 
         })
+
+
+def page_not_found(request):
+    """
+    全局404
+    """
+    from django.shortcuts import render_to_response
+    response = render_to_response('404.html', {})
+    response.status_code = 404
+    return response
+
+
+def service_error(request):
+    """
+    全局500
+    """
+    from django.shortcuts import render_to_response
+    response = render_to_response('500.html', {})
+    response.status_code = 500
+    return response
+
+
+def no_permission():
+    """
+    全局403
+    """
+    from django.shortcuts import render_to_response
+    response = render_to_response('403.html', {})
+    response.status_code = 403
+    return response
