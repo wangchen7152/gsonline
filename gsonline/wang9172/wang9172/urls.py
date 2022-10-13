@@ -16,12 +16,12 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 # from django.contrib import admin
-from django.views.generic import TemplateView
+
 from django.views.static import serve
 from users.views import LoginView, RegisterView, ActiveView, ForgetPassword, \
     ResetPassword, ModifyPwdView, LogOutView, IndexView
-from organization.views import OrgList
-from wang9172.settings import MEDIA_ROOT
+
+from wang9172.settings import MEDIA_ROOT, STATIC_ROOT
 
 import xadmin
 
@@ -61,4 +61,12 @@ urlpatterns = [
 
     # 用户个人中心
     url(r'^user/', include('users.urls', namespace="user")),
+
+    # 配置上传文件访问处理
+    url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
 ]
+
+# 全局404
+handler404 = 'users.views.page_not_found'
+handler500 = 'users.views.service_error'
+handler403 = 'users.views.no_permission'
