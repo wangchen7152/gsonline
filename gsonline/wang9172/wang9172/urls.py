@@ -21,7 +21,7 @@ from django.views.static import serve
 from users.views import LoginView, RegisterView, ActiveView, ForgetPassword, \
     ResetPassword, ModifyPwdView, LogOutView, IndexView
 
-from wang9172.settings import MEDIA_ROOT, STATIC_ROOT
+from wang9172.settings import MEDIA_ROOT
 
 import xadmin
 
@@ -63,7 +63,7 @@ urlpatterns = [
     url(r'^user/', include('users.urls', namespace="user")),
 
     # 配置上传文件访问处理
-    url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
+    # url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
 ]
 
 # 全局404

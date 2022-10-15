@@ -55,6 +55,14 @@ class Course(models.Model):
         return self.coursecomments_set.all()[:6]
 
 
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = u'轮播课程'
+        verbose_name_plural = verbose_name
+        # 不会生成新的表
+        proxy = True
+
+
 class Lesson(models.Model):
     course = models.ForeignKey(Course, verbose_name=u"课程")
     name = models.CharField(max_length=64, verbose_name=u"章节名")
