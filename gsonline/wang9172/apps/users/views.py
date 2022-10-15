@@ -431,3 +431,28 @@ def no_permission():
     response = render_to_response('403.html', {})
     response.status_code = 403
     return response
+
+
+class UnSafeView(View):
+    def get(self, request):
+        register_form = RegisterForm()
+        return render(request, 'register.html', {
+            "register_form": register_form,
+        })
+
+    def post(self, request):
+        user_name = request.POST.get("username", "")
+        pass_word = request.POST.get("password", "")
+        import MySQLdb
+        connection = MySQLdb.connect(host='127.0.0.1',
+                                     user='root',
+                                     password='123456',
+                                     db='mu_online',
+                                     charset='utf8')
+        cursor = connection.cursor()
+        sql_select = "select * form users_userprofile where email='{0}' " \
+                     "and password='{1}'".format(user_name, pass_word)
+        result = cursor.execute(sql_select)
+        for row in cursor.fetchall():
+            # 查询到用户
+            pass
