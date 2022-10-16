@@ -8,7 +8,7 @@
 		<div class="brief group_list">
                 {% for course in all_courses %}
                 <div class="module1_5 box">
-                    <a class="comp-img-box" href="course-detail.html">
+                    <a class="comp-img-box" href="{% url 'course:detail' course.id %}">
 
                         <img width="214" height="195" src="{{ MEDIA_URL }}{{ course.image }}"/>
                     </a>
