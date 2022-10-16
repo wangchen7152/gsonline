@@ -64,6 +64,9 @@ urlpatterns = [
 
     # 配置上传文件访问处理
     # url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
+
+    # 富文本编辑器
+    url(r'^ueditor/', include('DjangoUeditor.urls')),
 ]
 
 # 全局404

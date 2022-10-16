@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from datetime import datetime
 
+from DjangoUeditor.models import UEditorField
 from django.db import models
 from organization.models import CourseOrg, Teacher
 
@@ -15,7 +16,6 @@ class Course(models.Model):
                              verbose_name=u"课程表")
     name = models.CharField(max_length=64, verbose_name=u"课程名称")
     desc = models.CharField(max_length=256, verbose_name=u"课程描述")
-    detail = models.TextField(verbose_name=u"课程描述")
     teacher = models.ForeignKey(Teacher, verbose_name='机构讲师')
     degree = models.CharField(max_length=12, choices=(
         ("cj", "初级"), ("zj", "中级"), ("gj", "高级")), verbose_name="难度")
@@ -33,6 +33,9 @@ class Course(models.Model):
                                        default='qd', blank=True, null=True)
     tag = models.CharField(default="", verbose_name=u"课程标签", max_length=10)
     is_banner = models.BooleanField(default=False, verbose_name=u'是否轮播')
+    detail = UEditorField(toolbars='full', imagePath="courses/ueditor/",
+                          filePath="courses/ueditor/",
+                          verbose_name="课程详情", default="")
 
     class Meta:
         verbose_name = u"课程"
@@ -43,6 +46,14 @@ class Course(models.Model):
 
     def get_lesson_nums(self):
         return self.lesson_set.all().count()
+
+    get_lesson_nums.short_description = u"章节数"
+
+    def go_to(self):
+        from django.utils.safestring import mark_safe
+        return mark_safe("<a href='https://www.baidu.com'>跳转</>")
+
+    go_to.short_description = u"跳转"
 
     def learn_users(self):
         return self.usercourse_set.all()[:5]
